@@ -54,8 +54,7 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
         /// Gets all entities. This method is not recommended
         /// </summary>
         /// <returns>The <see cref="IQueryable{TEntity}"/>.</returns>
-        [Obsolete("This method is not recommended, please use GetPagedList or GetPagedListAsync methods")]
-        public IQueryable<TEntity> GetAll()
+        public IQueryable<TEntity> Query()
         {
             return _dbSet;
         }
