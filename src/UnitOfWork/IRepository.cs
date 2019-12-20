@@ -233,24 +233,7 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
         /// <param name="predicate"></param>
         /// <returns></returns>
         int Count(Expression<Func<TEntity, bool>> predicate = null);
-
-        /// <summary>
-        /// Inserts a new entity synchronously.
-        /// </summary>
-        /// <param name="entity">The entity to insert.</param>
-        void Insert(TEntity entity);
-
-        /// <summary>
-        /// Inserts a range of entities synchronously.
-        /// </summary>
-        /// <param name="entities">The entities to insert.</param>
-        void Insert(params TEntity[] entities);
-
-        /// <summary>
-        /// Inserts a range of entities synchronously.
-        /// </summary>
-        /// <param name="entities">The entities to insert.</param>
-        void Insert(IEnumerable<TEntity> entities);
+       
 
         /// <summary>
         /// Inserts a new entity asynchronously.

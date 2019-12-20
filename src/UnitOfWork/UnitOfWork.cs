@@ -102,13 +102,6 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
             return (IRepository<TEntity>)repositories[type];
         }
 
-        /// <summary>
-        /// Executes the specified raw SQL command.
-        /// </summary>
-        /// <param name="sql">The raw SQL.</param>
-        /// <param name="parameters">The parameters.</param>
-        /// <returns>The number of state entities written to database.</returns>
-        public int ExecuteSqlCommand(string sql, params object[] parameters) => _context.Database.ExecuteSqlRaw(sql, parameters);
 
         /// <summary>
         /// Uses raw SQL queries to fetch the specified <typeparamref name="TEntity" /> data.
@@ -210,6 +203,17 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
         public void TrackGraph(object rootEntity, Action<EntityEntryGraphNode> callback)
         {
             _context.ChangeTracker.TrackGraph(rootEntity, callback);
+        }
+
+        /// <summary>
+        /// Executes the specified raw SQL command.
+        /// </summary>
+        /// <param name="sql">The raw SQL.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>The number of state entities written to database.</returns>
+        Task<int> IUnitOfWork.ExecuteSqlCommand(string sql, params object[] parameters)
+        {
+           return _context.Database.ExecuteSqlRawAsync(sql, parameters);
         }
     }
 }

@@ -505,27 +505,7 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
                 return _dbSet.Count(predicate);
             }
         }
-
-        /// <summary>
-        /// Inserts a new entity synchronously.
-        /// </summary>
-        /// <param name="entity">The entity to insert.</param>
-        public virtual void Insert(TEntity entity)
-        {
-            var entry = _dbSet.Add(entity);
-        }
-
-        /// <summary>
-        /// Inserts a range of entities synchronously.
-        /// </summary>
-        /// <param name="entities">The entities to insert.</param>
-        public virtual void Insert(params TEntity[] entities) => _dbSet.AddRange(entities);
-
-        /// <summary>
-        /// Inserts a range of entities synchronously.
-        /// </summary>
-        /// <param name="entities">The entities to insert.</param>
-        public virtual void Insert(IEnumerable<TEntity> entities) => _dbSet.AddRange(entities);
+               
 
         /// <summary>
         /// Inserts a new entity asynchronously.
