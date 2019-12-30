@@ -6,6 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Arch.EntityFrameworkCore.UnitOfWork.Host
 {
@@ -39,6 +42,24 @@ namespace Arch.EntityFrameworkCore.UnitOfWork.Host
                 .AddCustomRepository<Blog, CustomBlogRepository>();
 
             services.AddMvc();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+           .AddJwtBearer(options =>
+           {
+               options.SaveToken = true;
+               options.RequireHttpsMetadata = false;
+               options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+               {
+                   ValidateIssuer = false,
+                   ValidateAudience = false,                 
+                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SecureKey"))
+               };
+           });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
@@ -46,7 +67,8 @@ namespace Arch.EntityFrameworkCore.UnitOfWork.Host
         {
             loggingBuilder.AddConsole();
             loggingBuilder.AddDebug();
-
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints => {
                 endpoints.MapDefaultControllerRoute();
             });

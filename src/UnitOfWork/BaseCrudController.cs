@@ -28,7 +28,7 @@
             _validator = validator;
         }
 
-        [Authorize("Bearer")]
+        [Authorize]
         [HttpGet]
         [Route("Get")]
         public virtual async Task<IActionResult> GetAsync(int id)
@@ -36,11 +36,11 @@
             return Ok(new 
             {
                 Success = true,
-                Data = await _repository.FindAsync(id)
+                Data = _adapter.convertToModel(await _repository.FindAsync(id))
             });
         }
 
-        [Authorize("Bearer")]
+        [Authorize]
         [Route("update")]
         [HttpPut]
         public virtual async Task<IActionResult> PutAsync(M model)
@@ -68,7 +68,7 @@
           
         }
 
-        [Authorize("Bearer")]
+        [Authorize]
         [Route("create")]
         [HttpPost]
         public virtual async Task<IActionResult> PostAsync([FromBody] M model)
@@ -104,7 +104,7 @@
         /// </summary>
         /// <param name="entidade">A entidade que será apagada</param>
         /// <returns></returns>
-        [Authorize("Bearer")]
+        [Authorize]
         [HttpDelete]
         public virtual async Task<IActionResult> DeleteAsync(T entidade)
         {
