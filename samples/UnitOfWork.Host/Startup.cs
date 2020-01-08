@@ -9,6 +9,12 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using FluentValidation;
+using UnitOfWork.Host;
+using UnitOfWork.Host.Validators;
+using UnitOfWork;
+using UnitOfWork.Host.Adapters;
+using Microsoft.OpenApi.Models;
 
 namespace Arch.EntityFrameworkCore.UnitOfWork.Host
 {
@@ -36,13 +42,18 @@ namespace Arch.EntityFrameworkCore.UnitOfWork.Host
         {
             // use in memory for testing.
             services
-                .AddDbContext<BloggingContext>(opt => opt.UseMySql("Server=localhost;database=uow;uid=root;pwd=root1234;"))
-                //.AddDbContext<BloggingContext>(opt => opt.UseInMemoryDatabase("UnitOfWork"))
+                //.AddDbContext<BloggingContext>(opt => opt.UseMySql("Server=localhost;database=uow;uid=root;pwd=root1234;"))
+                .AddDbContext<BloggingContext>(opt => opt.UseInMemoryDatabase("UnitOfWork"))
                 .AddUnitOfWork<BloggingContext>()
                 .AddCustomRepository<Blog, CustomBlogRepository>();
 
             services.AddMvc();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo() { Title = "Web App", Version = "v1" });
 
+
+            });
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -60,18 +71,28 @@ namespace Arch.EntityFrameworkCore.UnitOfWork.Host
                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SecureKey"))
                };
            });
+
+            services.AddScoped<IValidator<BlogModel>, BlogValidator>();
+            services.AddScoped<IAdapter<Blog, BlogModel>, BlogAdapter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggingBuilder loggingBuilder)
+        public void Configure(IApplicationBuilder app)
         {
-            loggingBuilder.AddConsole();
-            loggingBuilder.AddDebug();
-            app.UseAuthentication();
+          
+            app.UseAuthentication();          
+            app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints => {
                 endpoints.MapDefaultControllerRoute();
             });
+            app.UseSwagger()
+            .UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ZBB Core");
+                c.RoutePrefix = string.Empty;
+            });
+
         }
     }
 }

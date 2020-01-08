@@ -1,6 +1,6 @@
 ﻿namespace UnitOfWork
 {
-    public interface IAdapter<M, T>
+    public interface IAdapter<T,M>
     {
         T convertFromModel(M model);
 

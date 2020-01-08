@@ -12,16 +12,14 @@ namespace Arch.EntityFrameworkCore.UnitOfWork.Host.Controllers
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private ILogger<ValuesController> _logger;
+        private readonly IUnitOfWork _unitOfWork;       
 
         // 1. IRepositoryFactory used for readonly scenario;
         // 2. IUnitOfWork used for read/write scenario;
         // 3. IUnitOfWork<TContext> used for multiple databases scenario;
-        public ValuesController(IUnitOfWork unitOfWork, ILogger<ValuesController> logger)
+        public ValuesController(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork;
-            _logger = logger;           
+            _unitOfWork = unitOfWork;                  
         }
 
         // GET api/values
@@ -45,15 +43,13 @@ namespace Arch.EntityFrameworkCore.UnitOfWork.Host.Controllers
         [HttpGet("Search/{term}")]
         public async Task<IPagedList<Blog>> Get(string term)
         {
-            _logger.LogInformation("demo about first or default with include");
-
             var item = _unitOfWork.GetRepository<Blog>().GetFirstOrDefault(predicate: x => x.Title.Contains(term), include: source => source.Include(blog => blog.Posts).ThenInclude(post => post.Comments));
 
-            _logger.LogInformation("demo about first or default without include");
+     
 
             item = _unitOfWork.GetRepository<Blog>().GetFirstOrDefault(predicate: x => x.Title.Contains(term), orderBy: source => source.OrderByDescending(b => b.Id));
 
-            _logger.LogInformation("demo about first or default with projection");
+         
 
             var projection = _unitOfWork.GetRepository<Blog>().GetFirstOrDefault(b => new { Name = b.Title, Link = b.Url }, predicate: x => x.Title.Contains(term));
 

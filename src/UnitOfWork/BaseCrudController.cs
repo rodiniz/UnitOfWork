@@ -9,18 +9,18 @@
 
     [ApiController]
     [Route("api/[controller]")]
-    public abstract class BaseCrudController<M, T> : ControllerBase where T : class
+    public abstract class BaseCrudController<T,M> : ControllerBase where T : class
     {
         private readonly IUnitOfWork _unitOfWork;
 
         private readonly IRepository<T> _repository;
 
-        public readonly IAdapter<M, T> _adapter;
+        public readonly IAdapter<T,M> _adapter;
 
         public readonly IValidator<M> _validator;
 
 
-        public BaseCrudController(IUnitOfWork unitOfWork, IAdapter<M, T> adapter, IValidator<M> validator)
+        public BaseCrudController(IUnitOfWork unitOfWork, IAdapter<T,M> adapter, IValidator<M> validator)
         {
             _unitOfWork = unitOfWork;
             _repository = _unitOfWork.GetRepository<T>();
@@ -28,19 +28,20 @@
             _validator = validator;
         }
 
-        [Authorize]
+      
         [HttpGet]
         [Route("Get")]
         public virtual async Task<IActionResult> GetAsync(int id)
         {
+            var entity = await _repository.FindAsync(id);
             return Ok(new 
             {
                 Success = true,
-                Data = _adapter.convertToModel(await _repository.FindAsync(id))
+                Data = _adapter.convertToModel(entity)
             });
         }
 
-        [Authorize]
+        //[Authorize]
         [Route("update")]
         [HttpPut]
         public virtual async Task<IActionResult> PutAsync(M model)
@@ -68,7 +69,7 @@
           
         }
 
-        [Authorize]
+        //[Authorize]
         [Route("create")]
         [HttpPost]
         public virtual async Task<IActionResult> PostAsync([FromBody] M model)
@@ -104,13 +105,27 @@
         /// </summary>
         /// <param name="entidade">A entidade que será apagada</param>
         /// <returns></returns>
-        [Authorize]
+        //[Authorize]
         [HttpDelete]
+        [Route("delete")]
         public virtual async Task<IActionResult> DeleteAsync(T entidade)
         {
             _repository.Delete(entidade);
             await _unitOfWork.SaveChangesAsync();
             return Ok(new 
+            {
+                Success = true
+            });
+        }
+
+        //[Authorize]
+        [HttpDelete]
+        [Route("deleteById")]
+        public virtual async Task<IActionResult> DeleteByIdAsync(int id)
+        {
+            _repository.Delete(id);
+            await _unitOfWork.SaveChangesAsync();
+            return Ok(new
             {
                 Success = true
             });
