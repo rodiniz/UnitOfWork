@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Arch.EntityFrameworkCore.UnitOfWork.Host.Models;
+using Inyector.Attributes;
 
 namespace UnitOfWork.Host.Adapters
 {
+    [Inyect(typeof(IAdapter<Blog, BlogModel>))]
     public class BlogAdapter : IAdapter<Blog, BlogModel>
     {
         public Blog convertFromModel(BlogModel model)

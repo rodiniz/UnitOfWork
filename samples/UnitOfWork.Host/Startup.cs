@@ -17,6 +17,8 @@ using Swashbuckle.AspNetCore.Swagger;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.OpenApi.Models;
+using Microsoft.Extensions;
+using Inyector;
 
 namespace Arch.EntityFrameworkCore.UnitOfWork.Host
 {
@@ -92,8 +94,14 @@ namespace Arch.EntityFrameworkCore.UnitOfWork.Host
                };
            });
 
-            services.AddScoped<IValidator<BlogModel>, BlogValidator>();
-            services.AddScoped<IAdapter<Blog, BlogModel>, BlogAdapter>();
+            services.UseInjector(configurations =>
+            {
+                configurations.Scan(typeof(Startup).Assembly)
+                    .DefaultMode(services, ServiceLifetime.Scoped)
+                    .AddRuleForNamingConvention(ServiceLifetime.Scoped);
+            });
+            //services.AddScoped<IValidator<BlogModel>, BlogValidator>();
+            //services.AddScoped<IAdapter<Blog, BlogModel>, BlogAdapter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
