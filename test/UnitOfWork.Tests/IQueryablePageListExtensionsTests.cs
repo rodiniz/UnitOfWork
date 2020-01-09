@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Arch.EntityFrameworkCore.UnitOfWork.Collections;
-using Arch.EntityFrameworkCore.UnitOfWork.Tests;
 using Arch.EntityFrameworkCore.UnitOfWork.Tests.Entities;
 using AutoFixture;
 using Xunit;
@@ -12,7 +11,7 @@ namespace Arch.EntityFrameworkCore.UnitOfWork.Tests
     public class IQueryablePageListExtensionsTests
     {
         public Fixture _fixture => new Fixture();
-       
+
         [Fact]
         public async Task ToPagedListAsyncTest()
         {
@@ -29,13 +28,11 @@ namespace Arch.EntityFrameworkCore.UnitOfWork.Tests
 
                 Assert.Equal(4, page.TotalCount);
                 Assert.Equal(2, page.Items.Count);
-              
 
                 page = await items.ToPagedListAsync(0, 2);
                 Assert.NotNull(page);
                 Assert.Equal(4, page.TotalCount);
                 Assert.Equal(2, page.Items.Count);
-                
             }
         }
 

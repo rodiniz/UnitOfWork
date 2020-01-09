@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Arch.EntityFrameworkCore.UnitOfWork.Tests.Entities
+﻿namespace Arch.EntityFrameworkCore.UnitOfWork.Tests.Entities
 {
     public class Country
     {

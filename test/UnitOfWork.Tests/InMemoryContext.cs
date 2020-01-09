@@ -7,7 +7,7 @@ namespace Arch.EntityFrameworkCore.UnitOfWork.Tests
     {
         public DbSet<Country> Countries { get; set; }
         public DbSet<Customer> Customers { get; set; }
-        public DbSet<City> Cities  { get; set; }
+        public DbSet<City> Cities { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

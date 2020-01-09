@@ -1,24 +1,16 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
+﻿using System.Text;
 using Arch.EntityFrameworkCore.UnitOfWork.Host.Models;
+using Inyector;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using FluentValidation;
-using UnitOfWork.Host;
-using UnitOfWork.Host.Validators;
-using UnitOfWork;
-using UnitOfWork.Host.Adapters;
-using Swashbuckle.AspNetCore.Swagger;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.OpenApi.Models;
-using Microsoft.Extensions;
-using Inyector;
 
 namespace Arch.EntityFrameworkCore.UnitOfWork.Host
 {
@@ -107,7 +99,6 @@ namespace Arch.EntityFrameworkCore.UnitOfWork.Host
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
         public void Configure(IApplicationBuilder app)
         {
-
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
@@ -123,8 +114,6 @@ namespace Arch.EntityFrameworkCore.UnitOfWork.Host
 
                 c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
             });
-
-
         }
     }
 }

@@ -7,11 +7,11 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Arch.EntityFrameworkCore.UnitOfWork.Collections;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Query;
-using Arch.EntityFrameworkCore.UnitOfWork.Collections;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Arch.EntityFrameworkCore.UnitOfWork
 {
@@ -49,7 +49,6 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
             }
         }
 
-
         /// <summary>
         /// Gets all entities. This method is not recommended
         /// </summary>
@@ -58,7 +57,6 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
         {
             return _dbSet;
         }
-
 
         /// <summary>
         /// Gets the <see cref="IPagedList{TEntity}"/> based on a predicate, orderby delegate and page information. This method default no-tracking query.
@@ -330,7 +328,6 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
             }
         }
 
-
         /// <inheritdoc />
         public virtual async Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
@@ -505,7 +502,6 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
                 return _dbSet.Count(predicate);
             }
         }
-               
 
         /// <summary>
         /// Inserts a new entity asynchronously.
@@ -555,7 +551,6 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
         public virtual void UpdateAsync(TEntity entity)
         {
             _dbSet.Update(entity);
-
         }
 
         /// <summary>

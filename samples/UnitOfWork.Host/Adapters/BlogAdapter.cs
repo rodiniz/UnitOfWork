@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Arch.EntityFrameworkCore.UnitOfWork.Host.Models;
+﻿using Arch.EntityFrameworkCore.UnitOfWork.Host.Models;
 using Inyector.Attributes;
 
 namespace UnitOfWork.Host.Adapters

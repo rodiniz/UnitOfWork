@@ -56,9 +56,9 @@ namespace Arch.EntityFrameworkCore.UnitOfWork.Tests
         {
             var repository = new Repository<Country>(db);
 
-            var page = await repository.GetPagedListAsync(predicate: t => t.Name == "A",  pageSize: 1);
+            var page = await repository.GetPagedListAsync(predicate: t => t.Name == "A", pageSize: 1);
 
-            Assert.Equal(1, page.Items.Count);           
+            Assert.Equal(1, page.Items.Count);
         }
 
         [Fact]

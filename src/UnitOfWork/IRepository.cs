@@ -12,9 +12,9 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
     using System.Linq.Expressions;
     using System.Threading;
     using System.Threading.Tasks;
-    using Microsoft.EntityFrameworkCore.Query;
     using Arch.EntityFrameworkCore.UnitOfWork.Collections;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
+    using Microsoft.EntityFrameworkCore.Query;
 
     /// <summary>
     /// Defines the interfaces for generic repository.
@@ -224,7 +224,7 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
         /// <summary>
         /// Gets all entities. This method is not recommended
         /// </summary>
-        /// <returns>The <see cref="IQueryable{TEntity}"/>.</returns>       
+        /// <returns>The <see cref="IQueryable{TEntity}"/>.</returns>
         IQueryable<TEntity> Query();
 
         /// <summary>
@@ -233,7 +233,6 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
         /// <param name="predicate"></param>
         /// <returns></returns>
         int Count(Expression<Func<TEntity, bool>> predicate = null);
-       
 
         /// <summary>
         /// Inserts a new entity asynchronously.

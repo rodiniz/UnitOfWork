@@ -32,7 +32,6 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
         /// <typeparam name="TEntity">The type of the entity.</typeparam>
         /// <returns>An instance of type inherited from <see cref="IRepository{TEntity}"/> interface.</returns>
         IRepository<TEntity> GetRepository<TEntity>(bool hasCustomRepository = false) where TEntity : class;
-       
 
         /// <summary>
         /// Asynchronously saves all changes made in this unit of work to the database.

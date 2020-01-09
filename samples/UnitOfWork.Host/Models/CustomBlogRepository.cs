@@ -4,7 +4,6 @@
     {
         public CustomBlogRepository(BloggingContext dbContext) : base(dbContext)
         {
-
         }
     }
 }

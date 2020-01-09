@@ -102,7 +102,6 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
             return (IRepository<TEntity>)repositories[type];
         }
 
-
         /// <summary>
         /// Uses raw SQL queries to fetch the specified <typeparamref name="TEntity" /> data.
         /// </summary>
@@ -213,7 +212,7 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
         /// <returns>The number of state entities written to database.</returns>
         Task<int> IUnitOfWork.ExecuteSqlCommand(string sql, params object[] parameters)
         {
-           return _context.Database.ExecuteSqlRawAsync(sql, parameters);
+            return _context.Database.ExecuteSqlRawAsync(sql, parameters);
         }
     }
 }

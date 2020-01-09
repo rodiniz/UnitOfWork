@@ -9,7 +9,7 @@ namespace Arch.EntityFrameworkCore.UnitOfWork.Tests
     public class TestGetFirstOrDefaultAsync
     {
         private static readonly InMemoryContext db;
-        
+
         static TestGetFirstOrDefaultAsync()
         {
             db = new InMemoryContext();
@@ -22,14 +22,13 @@ namespace Arch.EntityFrameworkCore.UnitOfWork.Tests
             }
         }
 
-
         [Fact]
         public async void TestGetFirstOrDefaultAsyncGetsCorrectItem()
         {
             var repository = new Repository<City>(db);
             var city = await repository.GetFirstOrDefaultAsync(predicate: t => t.Name == "A");
             Assert.NotNull(city);
-            Assert.Equal(1, city.Id);            
+            Assert.Equal(1, city.Id);
         }
 
         [Fact]
@@ -37,7 +36,7 @@ namespace Arch.EntityFrameworkCore.UnitOfWork.Tests
         {
             var repository = new Repository<City>(db);
             var city = await repository.GetFirstOrDefaultAsync(predicate: t => t.Name == "Easy-E");
-            Assert.Null(city);            
+            Assert.Null(city);
         }
 
         [Fact]
@@ -50,7 +49,6 @@ namespace Arch.EntityFrameworkCore.UnitOfWork.Tests
             Assert.NotNull(city);
             Assert.NotNull(city.Towns);
         }
-
 
         protected static List<Country> TestCountries => new List<Country>
         {

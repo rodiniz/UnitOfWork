@@ -19,7 +19,6 @@
 
         public readonly IValidator<M> _validator;
 
-
         public BaseCrudController(IUnitOfWork unitOfWork, IAdapter<T, M> adapter, IValidator<M> validator)
         {
             _unitOfWork = unitOfWork;
@@ -27,7 +26,6 @@
             _adapter = adapter;
             _validator = validator;
         }
-
 
         [HttpGet]
         [Route("Get")]
@@ -70,7 +68,6 @@
                     ex.Message
                 });
             }
-
         }
 
         [Authorize]
@@ -94,15 +91,12 @@
             }
             catch (Exception ex)
             {
-
                 return Ok(new
                 {
                     Success = false,
                     ex.Message
                 });
             }
-
-
         }
 
         /// <summary>
