@@ -4,7 +4,6 @@ using Arch.EntityFrameworkCore.UnitOfWork.Host.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -14,6 +13,9 @@ using UnitOfWork.Host;
 using UnitOfWork.Host.Validators;
 using UnitOfWork;
 using UnitOfWork.Host.Adapters;
+using Swashbuckle.AspNetCore.Swagger;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.OpenApi.Models;
 
 namespace Arch.EntityFrameworkCore.UnitOfWork.Host
@@ -51,8 +53,26 @@ namespace Arch.EntityFrameworkCore.UnitOfWork.Host
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo() { Title = "Web App", Version = "v1" });
-
-
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                   {
+                     new OpenApiSecurityScheme
+                     {
+                       Reference = new OpenApiReference
+                       {
+                         Type = ReferenceType.SecurityScheme,
+                         Id = "Bearer"
+                       }
+                      },
+                      new string[] { }
+                    }
+                  });
             });
             services.AddAuthentication(options =>
             {
@@ -67,7 +87,7 @@ namespace Arch.EntityFrameworkCore.UnitOfWork.Host
                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
                {
                    ValidateIssuer = false,
-                   ValidateAudience = false,                 
+                   ValidateAudience = false,
                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SecureKey"))
                };
            });
@@ -79,19 +99,23 @@ namespace Arch.EntityFrameworkCore.UnitOfWork.Host
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
         public void Configure(IApplicationBuilder app)
         {
-          
-            app.UseAuthentication();          
+
+            app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints => {
+            app.UseEndpoints(endpoints =>
+            {
                 endpoints.MapDefaultControllerRoute();
             });
             app.UseSwagger()
             .UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ZBB Core");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Versioned API v1.0");
                 c.RoutePrefix = string.Empty;
+
+                c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
             });
+
 
         }
     }

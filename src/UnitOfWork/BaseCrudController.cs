@@ -34,6 +34,10 @@
         public virtual async Task<IActionResult> GetAsync(int id)
         {
             var entity = await _repository.FindAsync(id);
+            if (entity==null)
+            {
+                return NotFound();
+            }
             return Ok(new 
             {
                 Success = true,
