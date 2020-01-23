@@ -35,10 +35,9 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
 
         /// <summary>
         /// Asynchronously saves all changes made in this unit of work to the database.
-        /// </summary>
-        /// <param name="ensureAutoHistory"><c>True</c> if save changes ensure auto record the change history.</param>
+        /// </summary>      
         /// <returns>A <see cref="Task{TResult}"/> that represents the asynchronous save operation. The task result contains the number of state entities written to database.</returns>
-        Task<int> SaveChangesAsync(bool ensureAutoHistory = false);
+        Task<int> SaveChangesAsync();
 
         /// <summary>
         /// Executes the specified raw SQL command.

@@ -39,7 +39,7 @@
             return Ok(new
             {
                 Success = true,
-                Data = _adapter.convertToModel(entity)
+                Data = _adapter.Adapt(entity)
             });
         }
 
@@ -51,7 +51,7 @@
             try
             {
                 _validator.ValidateAndThrow(model);
-                var entity = _adapter.convertFromModel(model);
+                var entity = _adapter.Adapt(model);
                 _repository.Update(entity);
 
                 await _unitOfWork.SaveChangesAsync();
@@ -78,7 +78,7 @@
             try
             {
                 _validator.ValidateAndThrow(model);
-                var entity = _adapter.convertFromModel(model);
+                var entity = _adapter.Adapt(model);
 
                 var inserted = await _repository.InsertAsync(entity);
 

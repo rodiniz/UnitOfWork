@@ -55,7 +55,7 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
         /// <returns>The <see cref="IQueryable{TEntity}"/>.</returns>
         public IQueryable<TEntity> Query()
         {
-            return _dbSet;
+            return _dbSet.AsNoTracking();
         }
 
         /// <summary>

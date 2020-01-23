@@ -92,6 +92,8 @@ namespace Arch.EntityFrameworkCore.UnitOfWork.Host
                     .DefaultMode(services, ServiceLifetime.Scoped)
                     .AddRuleForNamingConvention(ServiceLifetime.Scoped);
             });
+
+          
             //services.AddScoped<IValidator<BlogModel>, BlogValidator>();
             //services.AddScoped<IAdapter<Blog, BlogModel>, BlogAdapter>();
         }

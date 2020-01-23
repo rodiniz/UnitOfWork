@@ -113,51 +113,39 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
 
         /// <summary>
         /// Saves all changes made in this context to the database.
-        /// </summary>
-        /// <param name="ensureAutoHistory"><c>True</c> if save changes ensure auto record the change history.</param>
+        /// </summary>     
         /// <returns>The number of state entries written to the database.</returns>
-        public int SaveChanges(bool ensureAutoHistory = false)
-        {
-            if (ensureAutoHistory)
-            {
-                _context.EnsureAutoHistory();
-            }
+        public int SaveChanges()
+        {           
 
             return _context.SaveChanges();
         }
 
         /// <summary>
         /// Asynchronously saves all changes made in this unit of work to the database.
-        /// </summary>
-        /// <param name="ensureAutoHistory"><c>True</c> if save changes ensure auto record the change history.</param>
+        /// </summary>        
         /// <returns>A <see cref="Task{TResult}"/> that represents the asynchronous save operation. The task result contains the number of state entities written to database.</returns>
-        public async Task<int> SaveChangesAsync(bool ensureAutoHistory = false)
-        {
-            if (ensureAutoHistory)
-            {
-                _context.EnsureAutoHistory();
-            }
-
+        public async Task<int> SaveChangesAsync()
+        {            
             return await _context.SaveChangesAsync();
         }
 
         /// <summary>
         /// Saves all changes made in this context to the database with distributed transaction.
-        /// </summary>
-        /// <param name="ensureAutoHistory"><c>True</c> if save changes ensure auto record the change history.</param>
+        /// </summary>       
         /// <param name="unitOfWorks">An optional <see cref="IUnitOfWork"/> array.</param>
         /// <returns>A <see cref="Task{TResult}"/> that represents the asynchronous save operation. The task result contains the number of state entities written to database.</returns>
-        public async Task<int> SaveChangesAsync(bool ensureAutoHistory = false, params IUnitOfWork[] unitOfWorks)
+        public async Task<int> SaveChangesAsync( params IUnitOfWork[] unitOfWorks)
         {
             using (var ts = new TransactionScope())
             {
                 var count = 0;
                 foreach (var unitOfWork in unitOfWorks)
                 {
-                    count += await unitOfWork.SaveChangesAsync(ensureAutoHistory);
+                    count += await unitOfWork.SaveChangesAsync();
                 }
 
-                count += await SaveChangesAsync(ensureAutoHistory);
+                count += await SaveChangesAsync();
 
                 ts.Complete();
 

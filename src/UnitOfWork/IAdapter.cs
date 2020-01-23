@@ -2,8 +2,8 @@
 {
     public interface IAdapter<T, M>
     {
-        T convertFromModel(M model);
+        T Adapt(M model);
 
-        M convertToModel(T entity);
+        M Adapt(T entity);
     }
 }
