@@ -2,8 +2,6 @@
 {
     using System;
     using System.Threading.Tasks;
-    using Arch.EntityFrameworkCore.UnitOfWork;
-    using FluentValidation;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
@@ -11,27 +9,21 @@
     [Route("api/[controller]")]
     public abstract class BaseCrudController<T, M> : ControllerBase where T : class
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        private readonly IRepository<T> _repository;
-
         public readonly IAdapter<T, M> _adapter;
 
-        public readonly IValidator<M> _validator;
+        public readonly ICrudService<T,M> _crudService;
 
-        public BaseCrudController(IUnitOfWork unitOfWork, IAdapter<T, M> adapter, IValidator<M> validator)
+        public BaseCrudController(IAdapter<T, M> adapter, ICrudService<T, M> crudService)
         {
-            _unitOfWork = unitOfWork;
-            _repository = _unitOfWork.GetRepository<T>();
             _adapter = adapter;
-            _validator = validator;
+            _crudService = crudService;
         }
 
         [HttpGet]
         [Route("Get")]
         public virtual async Task<IActionResult> GetAsync(int id)
         {
-            var entity = await _repository.FindAsync(id);
+            var entity = await _crudService.FindAsync(id);
             if (entity == null)
             {
                 return NotFound();
@@ -50,11 +42,9 @@
         {
             try
             {
-                _validator.ValidateAndThrow(model);
+                _crudService.ValidateAndThrow(model);
                 var entity = _adapter.Adapt(model);
-                _repository.Update(entity);
-
-                await _unitOfWork.SaveChangesAsync();
+                await _crudService.UpdateAsync(entity);
                 return Ok(new
                 {
                     Success = true
@@ -77,16 +67,15 @@
         {
             try
             {
-                _validator.ValidateAndThrow(model);
+                _crudService.ValidateAndThrow(model);
                 var entity = _adapter.Adapt(model);
 
-                var inserted = await _repository.InsertAsync(entity);
-
-                await _unitOfWork.SaveChangesAsync();
+                var inserted = await _crudService.InsertAsync(entity);
+                
                 return Ok(new
                 {
                     Success = true,
-                    Data = inserted.Entity
+                    Data = _adapter.Adapt(inserted)
                 });
             }
             catch (Exception ex)
@@ -99,31 +88,12 @@
             }
         }
 
-        /// <summary>
-        /// Apaga a entidade do banco de dados.
-        /// </summary>
-        /// <param name="entidade">A entidade que será apagada</param>
-        /// <returns></returns>
         [Authorize]
         [HttpDelete]
         [Route("delete")]
-        public virtual async Task<IActionResult> DeleteAsync(T entidade)
-        {
-            _repository.Delete(entidade);
-            await _unitOfWork.SaveChangesAsync();
-            return Ok(new
-            {
-                Success = true
-            });
-        }
-
-        [Authorize]
-        [HttpDelete]
-        [Route("deleteById")]
         public virtual async Task<IActionResult> DeleteByIdAsync(int id)
         {
-            _repository.Delete(id);
-            await _unitOfWork.SaveChangesAsync();
+            await _crudService.DeleteAsync(id);
             return Ok(new
             {
                 Success = true

@@ -298,5 +298,14 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
         /// </summary>
         /// <param name="entities">The entities.</param>
         void Delete(IEnumerable<TEntity> entities);
+
+        Task<List<TEntity>> GetPagedAsync(Expression<Func<TEntity, bool>> predicate = null,
+                                                          Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+                                                          Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
+                                                          int pageIndex = 0,
+                                                          int pageSize = 20,
+                                                          bool disableTracking = true,
+                                                          CancellationToken cancellationToken = default(CancellationToken),
+                                                          bool ignoreQueryFilters = false);
     }
 }

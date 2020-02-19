@@ -166,6 +166,46 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
             }
         }
 
+        public virtual Task<List<TEntity>> GetPagedAsync(Expression<Func<TEntity, bool>> predicate = null,
+                                                          Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+                                                          Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
+                                                          int pageIndex = 0,
+                                                          int pageSize = 20,
+                                                          bool disableTracking = true,
+                                                          CancellationToken cancellationToken = default(CancellationToken),
+                                                          bool ignoreQueryFilters = false)
+        {
+            IQueryable<TEntity> query = _dbSet;
+
+            if (disableTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+
+            if (ignoreQueryFilters)
+            {
+                query = query.IgnoreQueryFilters();
+            }
+
+            if (orderBy != null)
+            {
+                return orderBy(query).ToListAsync();
+            }
+            else
+            {
+                return query.ToListAsync();
+            }
+        }
         /// <summary>
         /// Gets the <see cref="IPagedList{TResult}"/> based on a predicate, orderby delegate and page information. This method default no-tracking query.
         /// </summary>

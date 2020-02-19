@@ -116,7 +116,7 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
         /// </summary>     
         /// <returns>The number of state entries written to the database.</returns>
         public int SaveChanges()
-        {           
+        {
 
             return _context.SaveChanges();
         }
@@ -126,7 +126,7 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
         /// </summary>        
         /// <returns>A <see cref="Task{TResult}"/> that represents the asynchronous save operation. The task result contains the number of state entities written to database.</returns>
         public async Task<int> SaveChangesAsync()
-        {            
+        {
             return await _context.SaveChangesAsync();
         }
 
@@ -135,7 +135,7 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
         /// </summary>       
         /// <param name="unitOfWorks">An optional <see cref="IUnitOfWork"/> array.</param>
         /// <returns>A <see cref="Task{TResult}"/> that represents the asynchronous save operation. The task result contains the number of state entities written to database.</returns>
-        public async Task<int> SaveChangesAsync( params IUnitOfWork[] unitOfWorks)
+        public async Task<int> SaveChangesAsync(params IUnitOfWork[] unitOfWorks)
         {
             using (var ts = new TransactionScope())
             {
